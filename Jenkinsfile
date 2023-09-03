@@ -10,17 +10,18 @@ pipeline {
     stages {
         stage('Test') {
             steps {
-                bat "mvn -D clean test"
+                bat "mvn -D clean test -Dtest=*/example/*"
+                bat "mvn surefire-report:report"
             }
  
             post {                
-                success {
+                always {
                    publishHTML([
                        allowMissing: false, 
                        alwaysLinkToLastBuild: false, 
                        keepAll: false, 
-                       reportDir: '.', 
-                       reportFiles: 'junitReportFile.html', 
+                       reportDir: './target/site', 
+                       reportFiles: 'surefire-report.html', 
                        reportName: 'HTML Report', 
                        reportTitles: '', 
                        useWrapperFileDirectly: true])
